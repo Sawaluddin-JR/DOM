@@ -66,4 +66,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       event.preventDefault();
     });
+
+  //event onCopy
+  document.getElementById("inputCopy").addEventListener("copy", function () {
+    alert("Anda telah men-copy sesuatu...");
+  });
 });
