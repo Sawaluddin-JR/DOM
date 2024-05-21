@@ -31,31 +31,54 @@ function addTodo() {
   document.dispatchEvent(new Event(RENDER_EVENT));
 }
 
-//tampil todo
-document.addEventListener("DOMContentLoaded", function () {
-  const submitForm = document.getElementById("form");
-  submitForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    addTodo();
-  });
-});
-
-//tampil di console
-document.addEventListener(RENDER_EVENT, function () {
-  //console.log(todos);
-
-  //implementasi function makeTodo
-  const uncompletedTODOList = document.getElementById("todos");
-  uncompletedTODOList.innerHTML = "";
-
+//mencari todo berdasarkan ID
+function findTodo(todoId) {
   for (const todoItem of todos) {
-    const todoElement = makeTodo(todoItem);
-    //uncompletedTODOList.append(todoElement);
-    if (!todoItem.isCompleted) {
-      uncompletedTODOList.append(todoElement);
+    if (todoItem.id === todoId) {
+      return todoItem;
     }
   }
-});
+  return null;
+}
+
+//Menampilkan item Todo dan Menandai Todo selesai
+function addTaskToCompleted(todoId) {
+  const todoTarget = findTodo(todoId);
+
+  if (todoTarget == null) return;
+
+  todoTarget.isCompleted = true;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+//Hapus
+function findTodoIndex(todoId) {
+  for (const index in todos) {
+    if (todos[index].id === todoId) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+function removeTaskFromCompleted(todoId) {
+  const todoTarget = findTodoIndex(todoId);
+
+  if (todoTarget === -1) return;
+
+  todos.splice(todoTarget, 1);
+  document.dispatchEvent(new Event(RENDER_EVENT));
+}
+
+function undoTaskFromCompleted(todoId) {
+  const todoTarget = findTodo(todoId);
+
+  if (todoTarget == null) return;
+
+  todoTarget.isCompleted = false;
+  document.dispatchEvent(new Event(RENDER_EVENT));
+}
 
 //Tampil di halaman browser
 function makeTodo(todoObject) {
@@ -104,22 +127,32 @@ function makeTodo(todoObject) {
   return container;
 }
 
-//Menampilkan item Todo dan Menandai Todo selesai
-function addTaskToCompleted(todoId) {
-  const todoTarget = findTodo(todoId);
+//tampil todo
+document.addEventListener("DOMContentLoaded", function () {
+  const submitForm = document.getElementById("form");
+  submitForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    addTodo();
+  });
+});
 
-  if (todoTarget == null) return;
+//tampil di console
+document.addEventListener(RENDER_EVENT, function () {
+  //console.log(todos);
 
-  todoTarget.isCompleted = true;
-  document.dispatchEvent(new Event(RENDER_EVENT));
-}
+  //implementasi function makeTodo / element yang harus dilaksanakn
+  const uncompletedTODOList = document.getElementById("todos");
+  uncompletedTODOList.innerHTML = "";
 
-//mencari todo berdasarkan ID
-function findTodo(todoId) {
+  //element yang sudah dilakukan
+  const completedTODOList = document.getElementById("completed-todos");
+  completedTODOList.innerHTML = "";
+
   for (const todoItem of todos) {
-    if (todoItem.id === todoId) {
-      return todoItem;
-    }
+    const todoElement = makeTodo(todoItem);
+    //uncompletedTODOList.append(todoElement);
+    if (!todoItem.isCompleted) {
+      uncompletedTODOList.append(todoElement);
+    } else completedTODOList.append(todoElement);
   }
-  return null;
-}
+});
