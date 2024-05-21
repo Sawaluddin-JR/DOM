@@ -33,8 +33,37 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   //event onBlur
-  document.getElementById('inputNama').addEventListener('blur', function () {
-    console.log('inputNama: blur');
-    document.getElementById('notifikasiSisaKarakter').style.visibility = 'hidden';
+  document.getElementById("inputNama").addEventListener("blur", function () {
+    console.log("inputNama: blur");
+    document.getElementById("notifikasiSisaKarakter").style.visibility =
+      "hidden";
   });
+
+  //event onChange
+  document
+    .getElementById("inputCaptcha")
+    .addEventListener("change", function () {
+      console.log("inputCaptcha: change");
+      const inputCaptcha = document.getElementById("inputCaptcha").value;
+      const submitButtonStatus = document.getElementById("submitButton");
+      if (inputCaptcha === "PRNU") {
+        submitButtonStatus.removeAttribute("disabled");
+      } else {
+        submitButtonStatus.setAttribute("disabled", "");
+      }
+    });
+
+  //cara menangani captcha yang salah diinput
+  document
+    .getElementById("formDataDiri")
+    .addEventListener("submit", function (event) {
+      const inputCaptcha = document.getElementById("inputCaptcha").value;
+      if (inputCaptcha === "PRNU") {
+        alert("Selamat! Captcha Anda lolos :D");
+      } else {
+        alert("Captcha Anda belum tepat :(");
+        document.getElementById("submitButton").setAttribute("disabled", "");
+      }
+      event.preventDefault();
+    });
 });
