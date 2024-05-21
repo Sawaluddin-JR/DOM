@@ -71,4 +71,9 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("inputCopy").addEventListener("copy", function () {
     alert("Anda telah men-copy sesuatu...");
   });
+
+  //event onPaste
+  document.getElementById('inputPaste').addEventListener('paste', function () {
+    alert('Anda telah mem-paste sebuah teks...');
+  });
 });
